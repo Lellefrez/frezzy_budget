@@ -8,6 +8,12 @@ class AddtransectionScreen extends StatefulWidget {
 }
 
 class _AddtransectionScreenState extends State<AddtransectionScreen> {
+  final _amountController = TextEditingController();
+
+  String _selectedType = "expense";
+  String? _selectedCategory;
+  DateTime _selectedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

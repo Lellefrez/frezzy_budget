@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frezzy_budget/providers/transaction_provider.dart';
 import 'package:frezzy_budget/screen/add_transection.dart';
 import 'package:frezzy_budget/widgets/balance_card.dart';
 import 'package:frezzy_budget/widgets/transaction_card.dart';
+import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -22,20 +24,33 @@ class _DashboardScreen extends State<DashboardScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: BalanceCard(balance: 2000),
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return TransactionCard();
-            }, childCount: 5),
-          ),
-        ],
+      body: Consumer<TransactionProvider>(
+        builder: (context, transactionProvider, child) {
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: BalanceCard(balance: transactionProvider.totalBalance),
+                ),
+              ),
+              if (transactionProvider.transactions.isEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("No Transactions"),
+                  ),
+                )
+              else
+                SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final transaction = transactionProvider.transactions[index];
+                    return TransactionCard(transaction: transaction);
+                  }, childCount: transactionProvider.transactions.length),
+                ),
+            ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
