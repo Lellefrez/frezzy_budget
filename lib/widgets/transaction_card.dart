@@ -69,7 +69,7 @@ IconData getIconForCategory(String category) {
     case 'personal care':
       return Icons.face;
     case 'home':
-      return Icons.chair; // oppure Icons.home se preferisci
+      return Icons.chair; // oppure Icons.home se preferisco
     default:
       return Icons.category; // icona generica per categorie sconosciute
   }
