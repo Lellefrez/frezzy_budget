@@ -1,29 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:frezzy_budget/models/transaction.dart';
 
-List<Transaction> mockTransactions = [
-  Transaction(
-    id: "id",
-    userId: "userId",
-    amount: 5000,
-    type: "income",
-    category: "Salary",
-    date: DateTime(2025, 08, 07),
-    createdAt: DateTime(2025, 08, 07),
-  ),
-  Transaction(
-    id: "id",
-    userId: "userId",
-    amount: 50,
-    type: "expense",
-    category: "Restaurant",
-    date: DateTime(2025, 08, 07),
-    createdAt: DateTime(2025, 08, 07),
-  ),
-];
-
 class TransactionProvider extends ChangeNotifier {
-  List<Transaction> _transactions = mockTransactions;
+  List<Transaction> _transactions = [];
 
   List<Transaction> get transactions => _transactions;
 
@@ -31,6 +10,7 @@ class TransactionProvider extends ChangeNotifier {
     _transactions.add(transaction);
     //inoltre metto le transazioni in ordine di data
     _transactions.sort((a, b) => b.date.compareTo(a.date));
+    notifyListeners();
     return true;
   }
 

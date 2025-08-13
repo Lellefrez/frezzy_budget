@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frezzy_budget/constants/categories.dart';
+import 'package:frezzy_budget/models/transaction.dart';
+import 'package:frezzy_budget/providers/transaction_provider.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class AddtransectionScreen extends StatefulWidget {
   const AddtransectionScreen({super.key});
@@ -118,14 +122,105 @@ class _AddtransectionScreenState extends State<AddtransectionScreen> {
                           _selectedCategory = null;
                         });
                       },
+                      activeColor: Colors.green,
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile<String>(
+                      title: const Text('Expense'),
+                      value: 'expense',
+                      groupValue: _selectedType,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedType = value!;
+                          _selectedCategory = null;
+                        });
+                      },
+                      activeColor: Colors.red,
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'Date',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 8),
+              InkWell(
+                onTap: _selectDate,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey[300]!),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.calendar_today, color: Colors.grey[600]),
+                      const SizedBox(width: 12),
+                      Text(
+                        DateFormat('yyyy-MM-dd').format(_selectedDate),
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: _saveTransaction,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: Text('Add Transaction'),
+                ),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _selectDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  void _saveTransaction() {
+    final transaction = Transaction(
+      id: '',
+      userId: '',
+      amount: double.parse(_amountController.text),
+      type: _selectedType,
+      category: _selectedCategory!,
+      date: _selectedDate,
+      createdAt: DateTime.now(),
+    );
+
+    final transactionprovider = context.read<TransactionProvider>();
+
+    final success = transactionprovider.addTransection(transaction);
+
+    if (success) {
+      Navigator.pop(context);
+    }
   }
 }
