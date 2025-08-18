@@ -3,8 +3,10 @@ import 'package:frezzy_budget/models/transaction.dart';
 
 class TransactionProvider extends ChangeNotifier {
   List<Transaction> _transactions = [];
+  DateTime _selectedDate = DateTime.now();
 
   List<Transaction> get transactions => _transactions;
+  DateTime get selectedDate => _selectedDate;
 
   bool addTransection(Transaction transaction) {
     _transactions.add(transaction);
