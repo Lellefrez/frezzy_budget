@@ -29,7 +29,7 @@ class BalanceCard extends StatelessWidget {
           ),
           SizedBox(height: 8),
           Text(
-            "Total Balance",
+            "Montly Balance",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
           ),
         ],

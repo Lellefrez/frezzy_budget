@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frezzy_budget/providers/transaction_provider.dart';
 import 'package:frezzy_budget/screen/add_transection.dart';
 import 'package:frezzy_budget/widgets/balance_card.dart';
+import 'package:frezzy_budget/widgets/month_selector.dart';
 import 'package:frezzy_budget/widgets/transaction_card.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +32,21 @@ class _DashboardScreen extends State<DashboardScreen> {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: BalanceCard(balance: transactionProvider.totalBalance),
+                  child: Column(
+                    children: [
+                      BalanceCard(balance: transactionProvider.totalBalance),
+                      SizedBox(height: 16),
+                      MonthSelector(
+                        selectedDate: transactionProvider.selectedDate,
+                        onDateChanged: (date) {
+                          transactionProvider.setSelectedDate(
+                            date.year,
+                            date.month,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               if (transactionProvider.transactions.isEmpty)
@@ -43,10 +58,14 @@ class _DashboardScreen extends State<DashboardScreen> {
                 )
               else
                 SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final transaction = transactionProvider.transactions[index];
-                    return TransactionCard(transaction: transaction);
-                  }, childCount: transactionProvider.transactions.length),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final transaction =
+                          transactionProvider.filteredTransactions[index];
+                      return TransactionCard(transaction: transaction);
+                    },
+                    childCount: transactionProvider.filteredTransactions.length,
+                  ),
                 ),
             ],
           );
