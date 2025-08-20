@@ -36,6 +36,7 @@ class MonthSelector extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: FilterChip(
                   label: Text(monthName),
+                  selected: isSelected,
                   onSelected: (selected) {
                     if (selected) {
                       onDateChanged(month);
