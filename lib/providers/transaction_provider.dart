@@ -1,33 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:frezzy_budget/models/transaction.dart';
 
-List<Transaction> mockTransactions = [
-  Transaction(
-    id: "id",
-    userId: "userId",
-    amount: 200,
-    type: "income",
-    category: "freelance",
-    date: DateTime.now(),
-    createdAt: DateTime.now(),
-  ),
-  Transaction(
-    id: "id",
-    userId: "userId",
-    amount: 400,
-    type: "income",
-    category: "freelance",
-    date: DateTime(2025, 07),
-    createdAt: DateTime.now(),
-  ),
-];
-
 class TransactionProvider extends ChangeNotifier {
-  List<Transaction> _transactions = mockTransactions;
+  List<Transaction> _transactions = [];
   DateTime _selectedDate = DateTime.now();
+  String _selectedCategory = "all";
 
   List<Transaction> get transactions => _transactions;
   DateTime get selectedDate => _selectedDate;
+  String get selectedCategory => _selectedCategory;
 
   bool addTransection(Transaction transaction) {
     _transactions.add(transaction);
@@ -41,7 +22,10 @@ class TransactionProvider extends ChangeNotifier {
   List<Transaction> get filteredTransactions {
     return _transactions.where((transaction) {
       return transaction.date.year == _selectedDate.year &&
-          transaction.date.month == _selectedDate.month;
+          transaction.date.month == _selectedDate.month &&
+          (transaction.category.toLowerCase() ==
+                  _selectedCategory.toLowerCase() ||
+              _selectedCategory == 'all');
     }).toList();
   }
 
@@ -58,6 +42,11 @@ class TransactionProvider extends ChangeNotifier {
 
   void setSelectedDate(int year, int month) {
     _selectedDate = DateTime(year, month);
+    notifyListeners();
+  }
+
+  void setSelectedCategory(String category) {
+    _selectedCategory = category;
     notifyListeners();
   }
 }

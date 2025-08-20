@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frezzy_budget/providers/transaction_provider.dart';
 import 'package:frezzy_budget/screen/add_transection.dart';
 import 'package:frezzy_budget/widgets/balance_card.dart';
+import 'package:frezzy_budget/widgets/category_selector.dart';
 import 'package:frezzy_budget/widgets/month_selector.dart';
 import 'package:frezzy_budget/widgets/transaction_card.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,13 @@ class _DashboardScreen extends State<DashboardScreen> {
                             date.year,
                             date.month,
                           );
+                        },
+                      ),
+                      SizedBox(height: 8),
+                      CategorySelector(
+                        selectedCategory: transactionProvider.selectedCategory,
+                        onCategoryChanged: (category) {
+                          transactionProvider.setSelectedCategory(category);
                         },
                       ),
                     ],

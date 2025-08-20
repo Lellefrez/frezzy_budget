@@ -1,11 +1,7 @@
 class TransactionCategories {
   static const List<String> incomeCategories = [
     'Salary',
-    'Freelane',
     'Investment',
-    'Gift',
-    'Bonus',
-    'Rental',
     'Other Income',
   ];
 
